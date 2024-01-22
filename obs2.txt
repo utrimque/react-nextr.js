@@ -1,0 +1,143 @@
+wapalizer 
+shadcn 
+nextjs.org
+terminal
+-npm i -g npm
+-npx create-next-app@latest -> no app router -> import alias
+-cd nome do next
+-code . 
+-visual code 
+-terminal vsc
+-npm  i module-alias
+-in tsconfig 
+-"moduleResolution": "Node",
+-npm run dev 
+-extensao ES7 React/Redux/GraphQL/React-Native snippets
+-simple react sniplets
+-apagar index 
+-index rfc=
+-import React from 'react'
+
+export default function Home() {
+  return (
+    <div>Home</div>
+  )
+}
+
+-styles-> global.css apagar tudo do primeiro root pra baixo 
+-no index div
+-<div className='flex flex-col min-h-screen items-center justify-center'>
+-https://ui.shadcn.com/
+-get started 
+-instalation
+-npx shadcn-ui@latest init
+-npx shadcn-ui@latest add ->avatar, button, card, checkbox, input, label
+-no shacdcn ir no themes escolha copie e substitua no global csss
+-no index
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import React from 'react'
+import { FcGoogle } from "react-icons/fc";
+
+export default function Home() {
+  return (
+    <div className='flex flex-col min-h-screen items-center justify-center'>
+      <Card className='w-[400px] h-[450px]'>
+        <CardHeader>
+          <CardTitle>
+            login
+            <CardDescription>
+              Preencha seus dados .
+            </CardDescription>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col gap-1">
+            <Label>
+              EMAIL 
+
+            </Label>
+            <Input type={"email"} placeholder='seuemail@gmail.com'/>
+            <Input type={"password"} placeholder='**************'/>
+          </div>
+
+          <Button className='w-full'>
+            Entrar
+          </Button>
+          <Button className=' mt-2 w-full' variant={"outline"}><FcGoogle fontSize={20}/>
+            Entrar com o google
+          </Button>
+        </CardContent>
+      </Card>
+   
+    
+      </div>
+  )
+}
+ 
+-npm i react-icons
+-ir em https://console.cloud.google.com/projectselector2/apis/credentials?hl=pt-br&supportedpurview=project
+-criar projeto
+-tela de permição auth
+-criar credenciais 
+-criar env  e copiar  os dados criados apos criaçao
+GOOGLE_CLIENT_ID=624762563732-nm6oe7vkia4ribbhh235hfdl9i33a73o.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=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
+-cada un deles sera diferente 
+-depois em apptsx
+import "@/styles/globals.css";
+import type { AppProps } from "next/app";
+import {SessionProvider} from 'next-auth/react'
+
+export default function App({ Component, pageProps }: AppProps) {
+  return (
+    <SessionProvider>
+      <Component {...pageProps} />;
+    </SessionProvider>
+  )
+}
+-em api criar pasta auth
+-criar [...nextauth].ts
+import NextAuth from 'next-auth'
+import GoogleProvider from 'next-auth/providers/google'
+
+export const authOption={
+    providers:[
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID as string,
+            clientSecret:process.env.GOOGLE_CLIENT_SECRET as string
+        })
+    ]
+}
+export default NextAuth(authOption)
+- no inddex acrecentar e modificar 
+import{signIn} from "next-auth/react"
+
+ <Button onclick={() => signIn ('google', {
+            callbackUrl:"/home"
+          })} className=' mt-2 w-full' variant={"outline"}><FcGoogle fontSize={20}/>
+            Entrar com o google
+          </Button>
+-no pages criar pasta home e arquivo index.tsx
+import { Avatar, AvatarImage } from '@/components/ui/avatar'
+import React from 'react'
+import {useSession} from"next-auth/react"
+
+export default function home() {
+    const {data, status} = useSession();
+  return (
+    <div className='flex flex-col min-h-screen items-center justify-center'>
+        <Avatar>
+            <AvatarImage src={`${data?.user?.image}`}/>
+        </Avatar>
+        <p>{data?.user?.name}</p>
+        <p>{data?.user?.email}</p>
+    </div>
+  )
+}
+
+
+- no env
+NEXTAUTH_URL=http://localhost:3000/
